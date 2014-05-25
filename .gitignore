@@ -1,12 +1,62 @@
-*.class
+package Analisador;
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+public class AnalisadorLexico {
 
-# Package Files #
-*.jar
-*.war
-*.ear
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+
+		 String codeFont = new String("#Este é outro comentário de linha única\n?>");
+		 
+		 char alfabeto[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+				 'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2',
+				 '3','4','5','6','7','8','9','´','`','[',']','{','}',',','.',';',':','<','>','+','=','-','_','(',')','*','&','¨','%',
+				 '$','#','@','!','\'','"','?','/','\\','Ç','ç','~','^'};
+		 
+		 char numeros[]= {'0','1','2','3','4','5','6','7','8','9'};
+		 
+		 char caracterEspeciais[] = {'´','`','[',']','{','}',',','.',';',':','<','>','+','=','-','_','(',')','*','&','¨','%','$','#',
+				 '@','!','\'','"','?','/','\\','Ç','ç','~','^'};
+		 
+		 char operaAritmetica[] = {'+','-','/','*'};
+		 
+		 String keyWords[] = {"abstract","and","array()","as","break","case","catch","class","clone","const","continue","declare",
+				 "default","do","else","elseif","enddeclare","endfor","endforeach","endif","endswitch","endwhile","extends","final",
+				 "for","foreach","function","global","goto","if","implements","interface","instanceof","namespace","new","old_function",
+				 "private","protected","public","static","switch","throw","try","use","var","while","xor"};
+		 
+		 char delimitadores[]={'[',']','{','}',';','(',')','\'','"'};
+		 
+		 String delimiEspecial[]={",","<?php","?>","//","/*","*/"};
+		 
+		 char code[]=codeFont.toCharArray();
+		 
+		 String buffer=""; // variável que acumulará os caracteres para analizar seu tipo
+		 int linha=0, coluna=0; // variáveis de controle para registrar as linhas e colunas analizadas pelo parser.
+		 
+		 //loop de finalidade para ler todos os caracteres do codigo Fonte.
+		 for(int c=0;c<code.length;c++){ // a intenção aqui é criar um contador "c" que ira ser incrementado a cada loop.
+			 
+			 if(code[c] == ' '){ // cada caracter de código fonte deverá ser comparada a 1 espaço em branco
+				 coluna++; // se for igual então incrementa 1 na variável coluna
+			 }
+			 
+			 if(code[c] == '\n'){// cada caracter de código fonte deverá ser comparada a "uma quebra de linha ou fim de linha"
+				 linha++;  // se for igual então incrementa 1 na variável linha
+			 }
+			 
+			 if(code[c] == '#'){// Se algum caracter de código fonte for "#" então ele executa a linha seguinte
+				 for(int i=0; i<alfabeto.length;i++){//loop com finalidade de ler os caracteres de alabeto para comparações
+					 if(code[c] == alfabeto[i] && code[c] != '\n'){ //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
+				 coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
+				 
+				 buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
+					 }
+					 	 
+				 }
+				 System.out.print("linhas: "+linha+"\nColunas:"+coluna+"\n"+buffer);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
+		 	 }
+		 }
+	}
+
+}
