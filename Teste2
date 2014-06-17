@@ -1,7 +1,5 @@
 package php;
 
-import static java.lang.Thread.sleep;
-import static java.lang.Thread.sleep;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -84,7 +82,6 @@ import javax.swing.table.DefaultTableModel;
                 //log
                 log = "Avança para o próximo caracter.";
                 System.out.println(log);
-                
             }
               
             if(code[c] == '\n'){// cada caracter de código fonte deverá ser comparada a "uma quebra de linha ou fim de linha"
@@ -136,15 +133,15 @@ import javax.swing.table.DefaultTableModel;
                 System.out.println(log);         
             }
             
-            //caracterTemp = code[++c];
             // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "*" se for, ele incrementa mais 1 na variável
             // "c" para cada caracter diferente de "*" seguido de "/".
-            if((code[c] == '/') && (caracterTemp == '*')){
-                //c--;//descressimo para compensar o acrescimo feito no if acima.
+            if((code[c] == '/') && (code[c++] == '*')){
+                c--;//descressimo para compensar o acrescimo feito no if acima.
+                
                 log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                 System.out.println(log);
                 
-                while((code[c] != '*') && code[c++] != '/'){
+                do{//faça oque está dentro dessas chaves
                     
                     c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
                     coluna++;
@@ -161,7 +158,7 @@ import javax.swing.table.DefaultTableModel;
                         log = "Fim de linha.\nNova uma linha.\nReseta coluna.";
                         System.out.println(log);
                     }
-                }//fim de while e de comentário de várias linhas
+                }while((code[c] != '*') && code[c++] != '/');//fim de while e de comentário de várias linhas
                 
                 log = "Fim de comentário.\nAvança para próximo caracter.";
                 System.out.println(log);
@@ -184,8 +181,3 @@ import javax.swing.table.DefaultTableModel;
             }
         }
     }
-
-
-
-
-    
