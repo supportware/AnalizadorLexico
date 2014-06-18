@@ -199,7 +199,7 @@ import javax.swing.table.DefaultTableModel;
                             System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
                             System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                             
-                            if((buffer == delimiEspecial[i])){
+                            if((buffer.equals(delimiEspecial[i]))){
                                 //log
                                 log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.";
                                 System.out.println(log);
