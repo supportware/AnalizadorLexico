@@ -141,7 +141,7 @@ import javax.swing.table.DefaultTableModel;
                 log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                 System.out.println(log);
                 
-                do{//faça oque está dentro dessas chaves
+                while((code[c] != '*') && code[c+1] != '/'){//faça oque está dentro dessas chaves
                     
                     c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
                     coluna++;
@@ -158,7 +158,7 @@ import javax.swing.table.DefaultTableModel;
                         log = "Fim de linha.\nNova uma linha.\nReseta coluna.";
                         System.out.println(log);
                     }
-                }while((code[c] != '*') && code[c++] != '/');//fim de while e de comentário de várias linhas
+                }//fim de while e de comentário de várias linhas
                 
                 log = "Fim de comentário.\nAvança para próximo caracter.";
                 System.out.println(log);
