@@ -9,8 +9,8 @@ import javax.swing.table.DefaultTableModel;
         // TODO Auto-generated method stub
 
 
-        String codeFont ="   \n/is deve ser reconhecido como um comentário\n"
-                + "/Comentário de várias linhas";
+        String codeFont ="   \n//is deve ser reconhecido como um comentário\n"
+                + "/*Comentário de várias linhas*/";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -115,9 +115,9 @@ import javax.swing.table.DefaultTableModel;
             
             // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "/" se for ele incrementa mais 1 na variável
             // "c" para cada caracter diferente de quebra de linha
-            if((code[c] == '/') && (code[c++] == '/')){
+            if((code[c] == '/') && (code[c+1] == '/')){
                 
-                c--;//descressimo para compensar o acrescimo feito no if acima.
+                //c--;//descressimo para compensar o acrescimo feito no if acima.
                 
                 log = "Comentário de linha única reconhecido:\""+code[c]+code[c]+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                 System.out.println(log);
@@ -135,8 +135,8 @@ import javax.swing.table.DefaultTableModel;
             
             // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "*" se for, ele incrementa mais 1 na variável
             // "c" para cada caracter diferente de "*" seguido de "/".
-            if((code[c] == '/') && (code[c++] == '*')){
-                c--;//descressimo para compensar o acrescimo feito no if acima.
+            if((code[c] == '/') && (code[c+1] == '*')){
+                //c--;//descressimo para compensar o acrescimo feito no if acima.
                 
                 log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                 System.out.println(log);
