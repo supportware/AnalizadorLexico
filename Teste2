@@ -9,8 +9,9 @@ import javax.swing.table.DefaultTableModel;
         // TODO Auto-generated method stub
 
 
-        String codeFont ="   \n//is deve ser reconhecido como um comentário\n"
-                + "/*Comentário de várias linhas*/";
+        String codeFont ="   \n//comentário\n"
+                + "/*Comentário de várias linhas*/\n//novoteste\n/*comentário**ksd/\n"
+                + "*/";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -70,114 +71,118 @@ import javax.swing.table.DefaultTableModel;
         //loop de finalidade para ler todos os caracteres do codigo Fonte.
         for(int c=0;c<code.length;c++){ // a intenção aqui é criar um contador "c" que ira ser incrementado a cada loop d assumirá o papel de índice de code.
 
-            if(code[c] == ' '){ // cada caracter de código fonte deverá ser comparada a 1 espaço em branco
-                //Avança para próximo caracter
-                
-                //log
-                log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
-                System.out.println(log);
-                                
-                coluna++; // se for igual então incrementa 1 na variável coluna
-                
-                //log
-                log = "Avança para o próximo caracter.";
-                System.out.println(log);
-            }
-              
-            if(code[c] == '\n'){// cada caracter de código fonte deverá ser comparada a "uma quebra de linha ou fim de linha"
-                
-                //Avança para próximo caracter
-                
-                log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
-                System.out.println(log);
-                linha++; // se for igual então incrementa 1 na variável linha
-                coluna = 1; //Quando ocorre um fim de linha a variável coluna é reiniciada.
-                
-                log = "Fim de linha\nAcrescenta linha.\nReseta coluna\nAvança para proximo caracter.";
-                System.out.println(log);
-            }
-            
-            //Até o momento mostrou-se desnecessário pois o sistema tem reconhecido aspenas as tabulações como caracteres em branco
-            if(code[c] == '\t'){// cada caracter de código fonte deverá ser comparada a "uma tabulação ou o tamanho de 4 caracteres em branvo"
-                //Avança para próximo caracter
+                if(code[c] == ' '){ // cada caracter de código fonte deverá ser comparada a 1 espaço em branco
+                    //Avança para próximo caracter
 
-                //log
-                log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
-                System.out.println(log);
-                
-                coluna += 4;    // incrementa 4 caractere em branco
-                
-                log = "acrescenta 4 em coluna\nAvança para prox. caracter.";
-                System.out.println(log);
-            }
-            
-            
-            
-            // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "/" se for ele incrementa mais 1 na variável
-            // "c" para cada caracter diferente de quebra de linha
-            if((code[c] == '/') && (code[c+1] == '/')){
-                
-                //c--;//descressimo para compensar o acrescimo feito no if acima.
-                
-                log = "Comentário de linha única reconhecido:\""+code[c]+code[c]+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
-                System.out.println(log);
-                
-                //Ignora todos os caracteres subsequetes até que ocorra uma quebra de linha
-                while(code[c] != '\n'){
-                    c++; //avança para próximo caracter até chegar ao fim da linha
-                }
-                
-                linha++;//conta mais uma linha
-                coluna = 1;//reseta coluna
-                log = "Fim de comentário.\nAcrescenta Linha.\nReseta coluna.\nAvança para próximo caracter depois do comentário.";
-                System.out.println(log);         
-            }
-            
-            // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "*" se for, ele incrementa mais 1 na variável
-            // "c" para cada caracter diferente de "*" seguido de "/".
-            if((code[c] == '/') && (code[c+1] == '*')){
-                //c--;//descressimo para compensar o acrescimo feito no if acima.
-                
-                log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
-                System.out.println(log);
-                
-                while((code[c] != '*') || code[c+1] != '/'){//enquato a preposição for true faça o que está dentro dessas chaves
-                    
-                    c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
-                    coluna++;
-                    
                     //log
-                    //log = "Avança para proximo caracter.";
-                    //System.out.println(log);
-                    
-                    if(code[c] == '\n'){
-                        
-                        linha++;// se carater for quebra de linha incrementa 1 na variável linha
-                        coluna = 1;// reseta a variável coluna.
-                        
-                        log = "Fim de linha.\nNova uma linha.\nReseta coluna.";
-                        System.out.println(log);
-                    }else{
-                        coluna = c;
+                    log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+
+                    coluna++; // se for igual então incrementa 1 na variável coluna
+
+                    //log
+                    log = "Avança para o próximo caracter.";
+                    System.out.println(log);
+                }
+
+                if(code[c] == '\n'){// cada caracter de código fonte deverá ser comparada a "uma quebra de linha ou fim de linha"
+
+                    //Avança para próximo caracter
+
+                    log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+                    linha++; // se for igual então incrementa 1 na variável linha
+                    coluna = 1; //Quando ocorre um fim de linha a variável coluna é reiniciada.
+
+                    log = "Fim de linha\nAcrescenta linha.\nReseta coluna\nAvança para proximo caracter.";
+                    System.out.println(log);
+                }
+
+                //Até o momento mostrou-se desnecessário pois o sistema tem reconhecido aspenas as tabulações como caracteres em branco
+                if(code[c] == '\t'){// cada caracter de código fonte deverá ser comparada a "uma tabulação ou o tamanho de 4 caracteres em branvo"
+                    //Avança para próximo caracter
+
+                    //log
+                    log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+
+                    coluna += 4;    // incrementa 4 caractere em branco
+
+                    log = "acrescenta 4 em coluna\nAvança para prox. caracter.";
+                    System.out.println(log);
+                }
+
+
+
+                // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "/" se for ele incrementa mais 1 na variável
+                // "c" para cada caracter diferente de quebra de linha
+                if((code[c] == '/') && (code[c+1] == '/')){
+
+                    //c--;//descressimo para compensar o acrescimo feito no if acima.
+
+                    log = "Comentário de linha única reconhecido:\""+code[c]+code[c]+"\"com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+
+                    //Ignora todos os caracteres subsequetes até que ocorra uma quebra de linha
+                    while(code[c] != '\n'){
+                        c++; //avança para próximo caracter até chegar ao fim da linha
                     }
-                }//fim de while e de comentário de várias linhas
-                c++;
-                coluna += 2;
-                log = "Fim de comentário.\nAvança para próximo caracter com índice:"+ c +" de valor: '"+code[c]+"'\n"
-                        + "coluna:"+coluna+"\nLinha:"+linha;
-                System.out.println(log);
-            }
-                
 
-                    //for(int i=0; i<alfabeto.length;i++){//loop com finalidade de ler os caracteres de alabeto para comparações
-                    /*
-                    if(code[c] == alfabeto[i] && code[c] != '\n'){ //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
+                    linha++;//conta mais uma linha
+                    coluna = 1;//reseta coluna
+                    log = "Fim de comentário.\nAcrescenta Linha.\nReseta coluna.\nAvança para próximo caracter depois do comentário.";
+                    System.out.println(log);         
+                }
+
+                // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "*" se for, ele incrementa mais 1 na variável
+                // "c" para cada caracter diferente de "*" seguido de "/".
+                if((code[c] == '/') && (code[c+1] == '*')){
+                    //c--;//descressimo para compensar o acrescimo feito no if acima.
+
+                    log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+
+                    while((code[c] != '*') || code[c+1] != '/'){//enquato a preposição for true faça o que está dentro dessas chaves
+
+                        c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
+                        coluna++;
+
+                        //log
+                        //log = "Avança para proximo caracter.";
+                        //System.out.println(log);
+
+                        if(code[c] == '\n'){
+
+                            linha++;// se carater for quebra de linha incrementa 1 na variável linha
+                            coluna = 1;// reseta a variável coluna.
+                            c++;
+                            log = "Fim de linha.\nNova uma linha.\nReseta coluna.";
+                            System.out.println(log);
+                        }else{
+                            coluna = c;
+                        }
+                    }//fim de while e de comentário de várias linhas
+                    c++;
+                    coluna += 2;
+                    log = "Fim de comentário.\nAvança para próximo caracter com índice depois do:"+ c +" de valor: '"+code[c]+"'\n"
+                            + "coluna:"+coluna+"\nLinha:"+linha;
+                    System.out.println(log);
+                }
+
+                //loop com finalidade de ler os caracteres de alabeto para comparações
+                for(int i=0; i<alfabeto.length;i++){
                         
-                        coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
+                        if(code[c] == alfabeto[i] && code[c] != '\n'){ //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
 
-                        buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
-                    }*/  
-                //System.out.print("linhas: "+linha+"\nColunas:"+coluna+"\n"+buffer);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
-            }
+                            coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
+
+                            buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
+                            
+                            log = "Caracter reconhecido:'"+code[c]+"'. Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
+                                + "Adiciona caracter no teken.\nValor do buffer:"+buffer;
+                            System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
+                        }
+                }
         }
     }
+}
