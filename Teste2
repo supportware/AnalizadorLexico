@@ -141,14 +141,14 @@ import javax.swing.table.DefaultTableModel;
                 log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                 System.out.println(log);
                 
-                while((code[c] != '*') && code[c+1] != '/'){//faça oque está dentro dessas chaves
+                while((code[c] != '*') || code[c+1] != '/'){//enquato a preposição for true faça o que está dentro dessas chaves
                     
                     c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
                     coluna++;
                     
                     //log
-                    log = "Avança para proximo caracter.";
-                    System.out.println(log);
+                    //log = "Avança para proximo caracter.";
+                    //System.out.println(log);
                     
                     if(code[c] == '\n'){
                         
@@ -157,17 +157,17 @@ import javax.swing.table.DefaultTableModel;
                         
                         log = "Fim de linha.\nNova uma linha.\nReseta coluna.";
                         System.out.println(log);
+                    }else{
+                        coluna = c;
                     }
                 }//fim de while e de comentário de várias linhas
-                
-                log = "Fim de comentário.\nAvança para próximo caracter.";
+                c++;
+                coluna += 2;
+                log = "Fim de comentário.\nAvança para próximo caracter com índice:"+ c +" de valor: '"+code[c]+"'\n"
+                        + "coluna:"+coluna+"\nLinha:"+linha;
                 System.out.println(log);
             }
                 
-
-
-
-
 
                     //for(int i=0; i<alfabeto.length;i++){//loop com finalidade de ler os caracteres de alabeto para comparações
                     /*
