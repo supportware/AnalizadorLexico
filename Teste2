@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
         String codeFont ="  <?php\n"
                 + "// comentário de única linha;\n"
                 + "#Comentário de única linha;\n"
-                + "?> ";
+                + "?>";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -194,7 +194,7 @@ import javax.swing.table.DefaultTableModel;
 
                             buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
                             
-                            log = "Caracter reconhecido:'"+code[c]+"'. Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
+                            log = "Caracter reconhecido:'"+code[c]+"', com índice"+ c +". Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
                                 + "Adiciona caracter no buffer.\nValor do buffer:"+buffer;
                             System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
                             System.out.println("--------------------------------------------");//separador para tornar o log mais legível
@@ -204,6 +204,7 @@ import javax.swing.table.DefaultTableModel;
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.\nReseta Buffer.";
                                     System.out.println(log);
+                                    coluna++;
                                     //Classifica tipo do token armazenado no buffer
                                     tipo="Delimitador de classe";
                                     model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
