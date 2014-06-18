@@ -30,7 +30,7 @@ import javax.swing.table.DefaultTableModel;
         char caracterEspeciais[] = {'´','`','[',']','{','}',',','.',';',':','<','>','+','=','-','_','(',')','*','&','¨','%','$','#',
         '@','!','\'','"','?','/','\\','Ç','ç','~','^'};
 
-        char operaAritmetica[] = {'+','-','/','*'};
+        char operadorMath[] = {'+','-','/','*'};
 
         String[] dicionario = new String[]{"abstract","and","array()","as","break","case","catch","cfunction","class","clone",
                 "const","continue","declare","default","do","else","elseif","enddeclare","endfor","endforeach","endif","endswitch","endwhile",
@@ -188,7 +188,7 @@ import javax.swing.table.DefaultTableModel;
                 for(int i=0; i<alfabeto.length;i++){
                     
                         //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
-                        if((code[c] == alfabeto[i]) && (code[c] != '\n') && (code[c] != '#') && ((code[c] != '/') && ((code[c+1] != '/') || (code[c+1] != '*')))){
+                        if((code[c] == alfabeto[i]) && (code[c] != '\n')){
 
                             coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
 
@@ -206,12 +206,26 @@ import javax.swing.table.DefaultTableModel;
                                     System.out.println(log);
                                     coluna++;
                                     //Classifica tipo do token armazenado no buffer
-                                    tipo="Delimitador de classe";
+                                    tipo="Delimitador Especial";
                                     model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
                                     buffer = "";//restart de buffer depois de reconhecimento válido
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                                 }
                             }// fim do loop do indice x dos delimitadores especiais
+/*                            
+                            for(int x=0; x<operadorMath.length;++x){
+                                if((buffer.equals(operadorMath[x]))){
+                                    //log
+                                    log = "Token reconhecido:'"+buffer+"', como Operador Aritmético.\nInseri token na tabela de símbolos.\nReseta Buffer.";
+                                    System.out.println(log);
+                                    coluna++;
+                                    //Classifica tipo do token armazenado no buffer
+                                    tipo="Operador Aritmético";
+                                    model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
+                                    buffer = "";//restart de buffer depois de reconhecimento válido
+                                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                                }
+                            }// fim do loop do indice x dos operadores aritméticos*/
                         }
                 }// fim do loop do indice i do alfabeto
         }
