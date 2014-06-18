@@ -11,7 +11,8 @@ import javax.swing.table.DefaultTableModel;
 
         String codeFont ="  <?php\n"
                 + "// comentário de única linha;\n"
-                + "#Comentário de única linha;";
+                + "#Comentário de única linha;\n"
+                + "?>";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -199,13 +200,17 @@ import javax.swing.table.DefaultTableModel;
                             System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
                             System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                             
-                            if((buffer.equals(delimiEspecial[i]))){
-                                //log
-                                log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.";
-                                System.out.println(log);
-                            }
+                            for(int x=0; x<delimiEspecial.length;++x){
+                                if((buffer.equals(delimiEspecial[x]))){
+                                    //log
+                                    log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.\nReseta Buffer.";
+                                    System.out.println(log);
+                                    buffer = "";//restart de buffer depois de reconhecimento válido
+                                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                                }
+                            }// fim do loop do indice x dos delimitadores especiais
                         }
-                }
+                }// fim do loop do indice i do alfabeto
         }
     }
 }
