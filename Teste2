@@ -9,9 +9,9 @@ import javax.swing.table.DefaultTableModel;
         // TODO Auto-generated method stub
 
 
-        String codeFont ="   \n//comentário\n"
-                + "/*Comentário de várias linhas*/\n//novoteste\n/*comentário**ksd/\n"
-                + "*/";
+        String codeFont ="  <?php\n"
+                + "// comentário de única linha;\n"
+                + "#Comentário de única linha;";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -56,7 +56,7 @@ import javax.swing.table.DefaultTableModel;
         char code[] = codeFont.toCharArray();
 
         String buffer=""; // variável que acumulará os caracteres para analizar seu tipo
-        char caracterTemp = ' ';
+        
         
         int linha=1, coluna=1; // variáveis de controle para registrar as linhas e colunas analizadas pelo parser.
 
@@ -83,6 +83,7 @@ import javax.swing.table.DefaultTableModel;
                     //log
                     log = "Avança para o próximo caracter.";
                     System.out.println(log);
+                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                 }
 
                 if(code[c] == '\n'){// cada caracter de código fonte deverá ser comparada a "uma quebra de linha ou fim de linha"
@@ -96,6 +97,7 @@ import javax.swing.table.DefaultTableModel;
 
                     log = "Fim de linha\nAcrescenta linha.\nReseta coluna\nAvança para proximo caracter.";
                     System.out.println(log);
+                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                 }
 
                 //Até o momento mostrou-se desnecessário pois o sistema tem reconhecido aspenas as tabulações como caracteres em branco
@@ -112,15 +114,10 @@ import javax.swing.table.DefaultTableModel;
                     System.out.println(log);
                 }
 
+                 // Se algum caracter de código fonte for "#" então incrementa mais 1 na variável "c" para cada caracter diferente de quebra de linha
+                if(code[c] == '#'){
 
-
-                // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "/" se for ele incrementa mais 1 na variável
-                // "c" para cada caracter diferente de quebra de linha
-                if((code[c] == '/') && (code[c+1] == '/')){
-
-                    //c--;//descressimo para compensar o acrescimo feito no if acima.
-
-                    log = "Comentário de linha única reconhecido:\""+code[c]+code[c]+"\"com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    log = "Comentário de linha única reconhecido:\""+code[c]+"\"com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
                     System.out.println(log);
 
                     //Ignora todos os caracteres subsequetes até que ocorra uma quebra de linha
@@ -131,7 +128,28 @@ import javax.swing.table.DefaultTableModel;
                     linha++;//conta mais uma linha
                     coluna = 1;//reseta coluna
                     log = "Fim de comentário.\nAcrescenta Linha.\nReseta coluna.\nAvança para próximo caracter depois do comentário.";
-                    System.out.println(log);         
+                    System.out.println(log);
+                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                }
+
+                
+                // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "/" se for ele incrementa mais 1 na variável
+                // "c" para cada caracter diferente de quebra de linha
+                if((code[c] == '/') && (code[c+1] == '/')){
+
+                    log = "Comentário de linha única reconhecido:\""+code[c]+code[c+1]+"\"com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    System.out.println(log);
+
+                    //Ignora todos os caracteres subsequetes até que ocorra uma quebra de linha
+                    while(code[c] != '\n'){
+                        c++; //avança para próximo caracter até chegar ao fim da linha
+                    }
+
+                    linha++;//conta mais uma linha
+                    coluna = 1;//reseta coluna
+                    log = "Fim de comentário.\nAcrescenta Linha.\nReseta coluna.\nAvança para próximo caracter depois do comentário.";
+                    System.out.println(log);
+                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                 }
 
                 // Se algum caracter de código fonte for "/" então verifica o proximo caracter se é igual a "*" se for, ele incrementa mais 1 na variável
@@ -139,18 +157,14 @@ import javax.swing.table.DefaultTableModel;
                 if((code[c] == '/') && (code[c+1] == '*')){
                     //c--;//descressimo para compensar o acrescimo feito no if acima.
 
-                    log = "Comentário de várias linhas reconhecido:\""+code[c]+caracterTemp+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
+                    log = "Comentário de várias linhas reconhecido:\""+code[c]+code[c+1]+"\"com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                     System.out.println(log);
 
                     while((code[c] != '*') || code[c+1] != '/'){//enquato a preposição for true faça o que está dentro dessas chaves
 
                         c++;//avança para próximo caracter até chegar ao fim dos comentários de várias linhas
                         coluna++;
-
-                        //log
-                        //log = "Avança para proximo caracter.";
-                        //System.out.println(log);
-
+                  
                         if(code[c] == '\n'){
 
                             linha++;// se carater for quebra de linha incrementa 1 na variável linha
@@ -167,20 +181,29 @@ import javax.swing.table.DefaultTableModel;
                     log = "Fim de comentário.\nAvança para próximo caracter com índice depois do:"+ c +" de valor: '"+code[c]+"'\n"
                             + "coluna:"+coluna+"\nLinha:"+linha;
                     System.out.println(log);
+                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                 }
 
                 //loop com finalidade de ler os caracteres de alabeto para comparações
                 for(int i=0; i<alfabeto.length;i++){
-                        
-                        if(code[c] == alfabeto[i] && code[c] != '\n'){ //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
+                    
+                        //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
+                        if((code[c] == alfabeto[i]) && (code[c] != '\n') && (code[c] != '#') && ((code[c] != '/') && ((code[c+1] != '/') || (code[c+1] != '*')))){
 
                             coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
 
                             buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
                             
                             log = "Caracter reconhecido:'"+code[c]+"'. Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
-                                + "Adiciona caracter no teken.\nValor do buffer:"+buffer;
+                                + "Adiciona caracter no buffer.\nValor do buffer:"+buffer;
                             System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
+                            System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                            
+                            if((buffer == delimiEspecial[i])){
+                                //log
+                                log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.";
+                                System.out.println(log);
+                            }
                         }
                 }
         }
