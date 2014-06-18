@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
         String codeFont ="  <?php\n"
                 + "// comentário de única linha;\n"
                 + "#Comentário de única linha;\n"
-                + "?>";
+                + "?> ";
                 /*+ "/*  "; "<?php\n"
                 + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
                 + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
@@ -57,12 +57,11 @@ import javax.swing.table.DefaultTableModel;
         char code[] = codeFont.toCharArray();
 
         String buffer=""; // variável que acumulará os caracteres para analizar seu tipo
-        
+        String log = "";// guarda os eventos acontecidos em cada processo
+        String tipo = "";//guarda tipo de token        
         
         int linha=1, coluna=1; // variáveis de controle para registrar as linhas e colunas analizadas pelo parser.
-
-        String log = "";
-        
+    
         if(codeFont.isEmpty()){//Exibi mensagem de notificação caso o código fonte seja vazio
             //log
             log = "Código Fonte Vazio!";
@@ -205,6 +204,9 @@ import javax.swing.table.DefaultTableModel;
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.\nReseta Buffer.";
                                     System.out.println(log);
+                                    //Classifica tipo do token armazenado no buffer
+                                    tipo="Delimitador de classe";
+                                    model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
                                     buffer = "";//restart de buffer depois de reconhecimento válido
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                                 }
