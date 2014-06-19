@@ -12,13 +12,8 @@ import javax.swing.table.DefaultTableModel;
         String codeFont ="  <?php\n"
                 + "// comentário de única linha;\n"
                 + "#Comentário de única linha;\n"
+                + "$nomeDaVariável "
                 + "?>";
-                /*+ "/*  "; "<?php\n"
-                + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //resultado: seu nome é \"Paulo\".\n"
-                + "echo 'Seu nome é \\\"Paulo\\\".';        //resultado: seu nome é \"Paulo\".\n"
-                + "echo 'Seu salário é $650,00';            //seu salário é $650\n"
-                + "echo \\\"Seu nome é \\\"Paulo\\\".\\\";  //seu salário é $650\n"
-                + "?>";*/
 
         char alfabeto[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
         'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2',
@@ -27,7 +22,9 @@ import javax.swing.table.DefaultTableModel;
 
         char numeros[]= {'0','1','2','3','4','5','6','7','8','9'};
 
-        char caracterEspeciais[] = {'´','`','[',']','{','}',',','.',';',':','<','>','+','=','-','_','(',')','*','&','¨','%','$','#',
+        //Como particularidade da linguagem fonte (PHP) o caracter '$' não será considerado um caracter especial. Será tratado como simbolo para identificar variáveis(identificadores)
+        // no caro de '#' é considerado isoladamente como comentário de linha única.
+        char caracterEspeciais[] = {'´','`','[',']','{','}',',','.',';',':','<','>','+','=','-','_','(',')','*','&','¨','%','$',
         '@','!','\'','"','?','/','\\','Ç','ç','~','^'};
 
         char operadorMath[] = {'+','-','/','*'};
@@ -42,6 +39,9 @@ import javax.swing.table.DefaultTableModel;
         char delimitadores[]={'[',']','{','}',';','(',')','\'','"'};
 
         String delimiEspecial[]={",","<?php","?>","//","/*","*/"};
+        
+        char noCharOneVariable[] ={'0','1','2','3','4','5','6','7','8','9','´','`','[',']','{','}',',','.',';',':','<','>',
+            '+','=','-','(',')','*','&','¨','%','@','!','\'','"','?','/','\\','Ç','ç','~','^'};
         
         //Configurações da tabela de símbolo
         //dados
@@ -191,7 +191,7 @@ import javax.swing.table.DefaultTableModel;
                         if((code[c] == alfabeto[i]) && (code[c] != '\n')){
 
                             coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
-
+                            
                             buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
                             
                             log = "Caracter reconhecido:'"+code[c]+"', com índice"+ c +". Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
@@ -200,7 +200,7 @@ import javax.swing.table.DefaultTableModel;
                             System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                             
                             for(int x=0; x<delimiEspecial.length;++x){
-                                if((buffer.equals(delimiEspecial[x]))){
+                              if((buffer.equals(delimiEspecial[x]))){
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.\nReseta Buffer.";
                                     System.out.println(log);
@@ -210,22 +210,32 @@ import javax.swing.table.DefaultTableModel;
                                     model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
                                     buffer = "";//restart de buffer depois de reconhecimento válido
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
-                                }
+                              }
                             }// fim do loop do indice x dos delimitadores especiais
-/*                            
-                            for(int x=0; x<operadorMath.length;++x){
-                                if((buffer.equals(operadorMath[x]))){
+
+                            //Bloco a seguir reconhece idententificadores ou variáveis
+                            for(int x=0;x<noCharOneVariable.length;++x){
+                              if((code[c] == '$') && (code[c+1] != noCharOneVariable[x]) && (code[c+1]) != ' '){
                                     //log
-                                    log = "Token reconhecido:'"+buffer+"', como Operador Aritmético.\nInseri token na tabela de símbolos.\nReseta Buffer.";
+                                    log = "Token reconhecido:'"+buffer+"', como identificador.";
                                     System.out.println(log);
-                                    coluna++;
-                                    //Classifica tipo do token armazenado no buffer
-                                    tipo="Operador Aritmético";
-                                    model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
-                                    buffer = "";//restart de buffer depois de reconhecimento válido
+                                    coluna++;          
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
-                                }
-                            }// fim do loop do indice x dos operadores aritméticos*/
+                              
+                                }else{
+                                  //Quando haver um espaço em branco ou fim de linha então fecha o token e inseri na tabela de símbolos
+                                  if(code[c+1] == ' ' || code[c+1] == '\n'){ 
+                                      //log
+                                      log = "Fim da nomenclatura do identificador.\nInseri token de identificador na tabela de símbolos.\nReseta Buffer.";
+                                      System.out.println(log);
+                                      //Classifica tipo do token armazenado no buffer
+                                      tipo = "Identificador";
+                                      model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
+                                      buffer = "";//restart de buffer depois de reconhecimento válido
+                                      System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                                  }
+                              }
+                            }
                         }
                 }// fim do loop do indice i do alfabeto
         }
