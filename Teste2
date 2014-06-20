@@ -10,9 +10,9 @@ import javax.swing.table.DefaultTableModel;
 
 
         String codeFont ="  <?php\n"
-                + "// comentário de única linha;\n"
+                + "1323 234 4234278\n"
                 + "#Comentário de única linha;\n"
-                + "$nomeDaVariável "
+                + "$nomeDaVariávelGrande\n "
                 + "?>";
 
         char alfabeto[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
@@ -213,28 +213,83 @@ import javax.swing.table.DefaultTableModel;
                               }
                             }// fim do loop do indice x dos delimitadores especiais
 
-                            //Bloco a seguir reconhece idententificadores ou variáveis
-                            for(int x=0;x<noCharOneVariable.length;++x){
-                              if((code[c] == '$') && (code[c+1] != noCharOneVariable[x]) && (code[c+1]) != ' '){
+                            
+                            boolean flag = false; // funcionará como um interruptor
+                            
+                            for(int x=0;x<noCharOneVariable.length;++x){//(início de loop)  percorre os elementos da variável noCharOneVariable
+                                if(code[c+1] != noCharOneVariable[x]){//se próximo caracter não estiver entre os caracteres de noCharOneVariable liga o interruptor flag
+                                    flag = true; // liga o interruptor atribuíndo flag com o valor true
+                                } break; //interrompe o loop
+                            }///fim de loop
+                            
+                            //Bloco a seguir reconhece variáveis de php
+                            if((code[c] == '$') && (code[c+1] != ' ') && (code[c+1]) != '\n' && flag){//se caracter for $ e caracteres seguintes forem diferentes de espaço em branco e não estiver entre os caracteres de noCharOneVariable
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como identificador.";
                                     System.out.println(log);
-                                    coluna++;          
+                                    coluna++; //avança para próximo caracter
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
-                              
-                                }else{
+                            }else{
+                                
+                                flag = false;
+                                // Bloco reconhece constantes numéricas ou dígitos numéricos                            
+                                for(int x=0;x<noCharOneVariable.length;++x){//(início de loop)  percorre os elementos da variável numeros
+                                    if(code[c-1] == noCharOneVariable[x]){//Se próximo caracter estiver entre os caracteres de numeros liga o interruptor flag
+                                        flag = true; // liga o interruptor atribuíndo flag com o valor true
+                                    } break; //interrompe o loop
+                                }///fim de loop
+                                
                                   //Quando haver um espaço em branco ou fim de linha então fecha o token e inseri na tabela de símbolos
-                                  if(code[c+1] == ' ' || code[c+1] == '\n'){ 
+                                  if((code[c+1] == ' ' || code[c+1] == '\n') & flag){
                                       //log
                                       log = "Fim da nomenclatura do identificador.\nInseri token de identificador na tabela de símbolos.\nReseta Buffer.";
                                       System.out.println(log);
+                                      
+                                      if(buffer.length()>15){
+                                          System.out.println("Nomenclatura da variável muito grande, boas práticas exigem até 15 caracteres.");
+                                      }
+                                      
                                       //Classifica tipo do token armazenado no buffer
                                       tipo = "Identificador";
                                       model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
                                       buffer = "";//restart de buffer depois de reconhecimento válido
                                       System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                                   }
-                              }
+                            }
+                            
+                            flag = false;
+                            // Bloco reconhece constantes numéricas ou dígitos numéricos                            
+                            for(int x=0;x<numeros.length;++x){//(início de loop)  percorre os elementos da variável numeros
+                                if(code[c] == numeros[x]){//Se próximo caracter estiver entre os caracteres de numeros liga o interruptor flag
+                                    flag = true; // liga o interruptor atribuíndo flag com o valor true
+                                } break; //interrompe o loop
+                            }///fim de loop
+                            
+                            if((code[c+1] != ' ') && (code[c+1] != '\n') && flag){
+                                //log
+                                log = "Token reconhecido:'"+buffer+"', como constante numérica.";
+                                System.out.println(log);
+                                coluna++; //avança para próximo caracter
+                        
+                            }else{
+                                
+                                flag = false;
+                                // Bloco reconhece constantes numéricas ou dígitos numéricos                            
+                                for(int x=0;x<numeros.length;++x){//(início de loop)  percorre os elementos da variável numeros
+                                    if(code[c-1] == numeros[x]){//Se próximo caracter estiver entre os caracteres de numeros liga o interruptor flag
+                                        flag = true; // liga o interruptor atribuíndo flag com o valor true
+                                    } break; //interrompe o loop
+                                }///fim de loop
+                            
+                                if((code[c+1] == ' ' || code[c+1] == '\n') && flag){
+                                    log = "Inseri token de identificador na tabela de símbolos.\nReseta Buffer.";
+                                    System.out.println(log);
+                                    //Classifica tipo de token armazenado no buffer      
+                                    tipo = "Constante numérica";
+                                    model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
+                                    buffer = "";//restart de buffer depois de reconhecimento válido
+                                    System.out.println("--------------------------------------------");//separador para tornar o log mais legível
+                                }
                             }
                         }
                 }// fim do loop do indice i do alfabeto
