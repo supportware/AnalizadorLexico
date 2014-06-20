@@ -9,11 +9,16 @@ import javax.swing.table.DefaultTableModel;
         // TODO Auto-generated method stub
 
 
-        String codeFont ="  <?php\n"
-                + "1323 234 4234278\n"
-                + "#Comentário de única linha;\n"
-                + "$nomeDaVariávelGrande\n "
-                + "?>";
+        String codeFont = "\n"
+                        + "\n"
+                        + "  <?php \n"
+                        + "\n"
+                        + "#comment 1 linha\n"
+                        + "//Comment 1 linha\n"
+                        + "/*comment\n"
+                        + "varous\n"
+                        + "linhas*/\n"
+                        + " $variableMoreGrand\n?>";
 
         char alfabeto[] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
         'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1','2',
@@ -41,7 +46,7 @@ import javax.swing.table.DefaultTableModel;
         String delimiEspecial[]={",","<?php","?>","//","/*","*/"};
         
         char noCharOneVariable[] ={'0','1','2','3','4','5','6','7','8','9','´','`','[',']','{','}',',','.',';',':','<','>',
-            '+','=','-','(',')','*','&','¨','%','@','!','\'','"','?','/','\\','Ç','ç','~','^'};
+            '+','=','-','(',')','*','&','¨','%','@','!','\'','"','?','/','\\','Ç','ç','~','^',' ','\n'};
         
         //Configurações da tabela de símbolo
         //dados
@@ -56,7 +61,7 @@ import javax.swing.table.DefaultTableModel;
 
         char code[] = codeFont.toCharArray();
 
-        String buffer=""; // variável que acumulará os caracteres para analizar seu tipo
+        String buffer =""; // variável que acumulará os caracteres para analizar seu tipo
         String log = "";// guarda os eventos acontecidos em cada processo
         String tipo = "";//guarda tipo de token        
         
@@ -81,7 +86,7 @@ import javax.swing.table.DefaultTableModel;
                     coluna++; // se for igual então incrementa 1 na variável coluna
 
                     //log
-                    log = "Avança para o próximo caracter.";
+                    log = "Acrescenta coluna\nAvança para o próximo caracter.";
                     System.out.println(log);
                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                 }
@@ -102,19 +107,17 @@ import javax.swing.table.DefaultTableModel;
 
                 //Até o momento mostrou-se desnecessário pois o sistema tem reconhecido aspenas as tabulações como caracteres em branco
                 if(code[c] == '\t'){// cada caracter de código fonte deverá ser comparada a "uma tabulação ou o tamanho de 4 caracteres em branvo"
-                    //Avança para próximo caracter
-
                     //log
                     log = "Caracter reconhecido:'"+code[c]+"'. Com índice:"+c+"\ncoluna:"+coluna+"\nlinha:"+linha;
                     System.out.println(log);
 
-                    coluna += 4;    // incrementa 4 caractere em branco
+                    coluna += 4; // incrementa 4 caractere em branco
 
                     log = "acrescenta 4 em coluna\nAvança para prox. caracter.";
                     System.out.println(log);
                 }
 
-                 // Se algum caracter de código fonte for "#" então incrementa mais 1 na variável "c" para cada caracter diferente de quebra de linha
+                // Se algum caracter de código fonte for "#" então incrementa mais 1 na variável "c" para cada caracter diferente de quebra de linha
                 if(code[c] == '#'){
 
                     log = "Comentário de linha única reconhecido:\""+code[c]+"\"com índice:"+ c +"\ncoluna:"+coluna+"\nlinha:"+linha;
@@ -176,8 +179,12 @@ import javax.swing.table.DefaultTableModel;
                             coluna = c;
                         }
                     }//fim de while e de comentário de várias linhas
-                    c++;
-                    coluna += 2;
+                    c++;c++;
+                    coluna++; coluna++;
+                    if(code[c] == '\n'){
+                        coluna = 1;
+                        linha++;
+                    }
                     log = "Fim de comentário.\nAvança para próximo caracter com índice depois do:"+ c +" de valor: '"+code[c]+"'\n"
                             + "coluna:"+coluna+"\nLinha:"+linha;
                     System.out.println(log);
@@ -189,22 +196,21 @@ import javax.swing.table.DefaultTableModel;
                     
                         //comparações entre caracteres do alfabeto e codeFont diferentes de fim de linha
                         if((code[c] == alfabeto[i]) && (code[c] != '\n')){
-
-                            coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
-                            
+                         
                             buffer += code[c]; // buffer concatena o caracter atual de code (ou pelo menos deveria fazer isso!)
                             
-                            log = "Caracter reconhecido:'"+code[c]+"', com índice"+ c +". Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
+                            log = "Caracter reconhecido:'"+code[c]+"', com índice:'"+ c +"'. Válido no alfabeto da linguagem.\ncoluna:"+coluna+"\nlinha:"+linha+"\n"
                                 + "Adiciona caracter no buffer.\nValor do buffer:"+buffer;
                             System.out.println(log);//exibi no terminal a quatidade de linha e colunas e a String formada em buffer
                             System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                             
                             for(int x=0; x<delimiEspecial.length;++x){
                               if((buffer.equals(delimiEspecial[x]))){
+                                    //coluna++;
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como delimitador Especial\nInseri token na tabela de símbolos.\nReseta Buffer.";
                                     System.out.println(log);
-                                    coluna++;
+                                    
                                     //Classifica tipo do token armazenado no buffer
                                     tipo="Delimitador Especial";
                                     model.addRow(new String[]{buffer,tipo});//adiciona token e seu tipo na tabela de símbolos
@@ -212,39 +218,42 @@ import javax.swing.table.DefaultTableModel;
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                               }
                             }// fim do loop do indice x dos delimitadores especiais
-
                             
                             boolean flag = false; // funcionará como um interruptor
                             
-                            for(int x=0;x<noCharOneVariable.length;++x){//(início de loop)  percorre os elementos da variável noCharOneVariable
-                                if(code[c+1] != noCharOneVariable[x]){//se próximo caracter não estiver entre os caracteres de noCharOneVariable liga o interruptor flag
-                                    flag = true; // liga o interruptor atribuíndo flag com o valor true
-                                } break; //interrompe o loop
-                            }///fim de loop
+                            if(buffer.length()>1){
+                                char temp[] = buffer.toCharArray();
+                                    for(int y=0;y<buffer.length();y++){
+                                    for(int x=0;x<noCharOneVariable.length;x++){//(início de loop)  percorre os elementos da variável noCharOneVariable
+                                        if(temp[y] != noCharOneVariable[x]){//se próximo caracter não estiver entre os caracteres de noCharOneVariable liga o interruptor flag
+                                            flag = true; // liga o interruptor atribuíndo flag com o valor true
+                                            //System.out.println("flag =true");
+                                            //break;
+                                        }else{
+                                            flag = false;
+                                            //System.out.println("flag =false");
+                                            //break;
+                                        } 
+                                        //interrompe o loop
+                                    }///fim de loop
+                                    }
+                            }
                             
                             //Bloco a seguir reconhece variáveis de php
-                            if((code[c] == '$') && (code[c+1] != ' ') && (code[c+1]) != '\n' && flag){//se caracter for $ e caracteres seguintes forem diferentes de espaço em branco e não estiver entre os caracteres de noCharOneVariable
+                            if(flag && (code[c+1] != ' ' || code[c+1] != '\n') && buffer.startsWith("$") && buffer.length() > 1){//se caracter for $ e caracteres seguintes forem diferentes de espaço em branco e não estiver entre os caracteres de noCharOneVariable
                                     //log
                                     log = "Token reconhecido:'"+buffer+"', como identificador.";
                                     System.out.println(log);
-                                    coluna++; //avança para próximo caracter
+                                    //coluna++; //avança para próximo caracter
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
-                            }else{
-                                
-                                flag = false;
-                                // Bloco reconhece constantes numéricas ou dígitos numéricos                            
-                                for(int x=0;x<noCharOneVariable.length;++x){//(início de loop)  percorre os elementos da variável numeros
-                                    if(code[c-1] == noCharOneVariable[x]){//Se próximo caracter estiver entre os caracteres de numeros liga o interruptor flag
-                                        flag = true; // liga o interruptor atribuíndo flag com o valor true
-                                    } break; //interrompe o loop
-                                }///fim de loop
-                                
+                                        
+                                    flag = false;
                                   //Quando haver um espaço em branco ou fim de linha então fecha o token e inseri na tabela de símbolos
-                                  if((code[c+1] == ' ' || code[c+1] == '\n') & flag){
+                                  if(code[c+1] == ' ' || code[c+1] == '\n'){
                                       //log
                                       log = "Fim da nomenclatura do identificador.\nInseri token de identificador na tabela de símbolos.\nReseta Buffer.";
                                       System.out.println(log);
-                                      
+                                      coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
                                       if(buffer.length()>15){
                                           System.out.println("Nomenclatura da variável muito grande, boas práticas exigem até 15 caracteres.");
                                       }
@@ -291,6 +300,7 @@ import javax.swing.table.DefaultTableModel;
                                     System.out.println("--------------------------------------------");//separador para tornar o log mais legível
                                 }
                             }
+                            coluna++;//como é lido mais um caracter é o cursor anda mais uma coluna
                         }
                 }// fim do loop do indice i do alfabeto
         }
